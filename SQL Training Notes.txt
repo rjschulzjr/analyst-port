@@ -1,0 +1,187 @@
+SQL Notes:
+
+/*Creates a table 'celebs' and adds three columns (id,name,age) w/ the data type*/
+CREATE TABLE celebs (id INTEGER, name TEXT, age INTEGER);
+
+/*Inserts rows into a table*/
+INSERT INTO celebs (id, name, age) VALUES (1, 'Justin Bieber', 21);
+
+/*Modifies a record in the tables*/
+UPDATE celebs 
+SET age = 22 
+WHERE id = 1; 
+
+SELECT * FROM celebs;
+
+/*Alter a column*/
+ALTER TABLE celebs ADD COLUMN twitter_handle TEXT; 
+
+/*Update a column value*/
+UPDATE celebs 
+SET twitter_handle = '@taylorswift13' 
+WHERE id = 4; 
+
+/*Delete rows based on NULL*/
+DELETE FROM celebs WHERE twitter_handle IS NULL;
+
+/*Operators of a WHERE clause*/
+= equals
+!= not equals
+> greater than
+< less than
+>= greater than or equal to
+<= less than or equal to
+
+/*Wild Card using LIKE, brings back all rows with Se_en where '_' can be anything*/
+SELECT * FROM movies
+WHERE name LIKE 'Se_en';
+
+/*Wild Card '%' matches zero or more missing letters in a patter*/
+SELECT * FROM movies
+WHERE name LIKE '%man%';
+
+/*BETWEEN lets you select result set w/in a certain range*/
+SELECT * FROM movies
+WHERE year BETWEEN 1990 AND 2000;
+
+/*Only returning by varchar*/
+SELECT * FROM movies
+WHERE year BETWEEN 1990 AND 2000
+AND genre = 'comedy';
+
+/*OR clause - used when want to return rows where either condition is true*/
+  SELECT * FROM movies
+  WHERE genre = 'comedy'
+  OR year < 1980;
+
+/*ORDER BY - DESC or return rows in decending order of imdb_rating*/
+/*ASC - Ascending*/
+SELECT * FROM movies
+ORDER BY imdb_rating DESC;
+
+/*LIMIT - Limits the number of rows returned*/
+SELECT * FROM movies
+ORDER BY imdb_rating ASC
+LIMIT 3;
+
+/**************************************Summary**************************
+SELECT is the clause you use every time you want to query information from a database.
+WHERE is a popular command that lets you filter the results of the query based on conditions that you specify.
+LIKE and BETWEEN are special operators that can be used in a WHERE clause
+AND and OR are special operators that you can use with WHERE to filter the query on two or more conditions.
+ORDER BY lets you sort the results of the query in either ascending or descending order.
+LIMIT lets you specify the maximum number of rows that the query will return. This is especially important in large tables that have thousands or even millions of rows.
+*****************************************************************************/
+/*Returns a count of the # of rows from a table*/
+SELECT COUNT(*) FROM fake_apps;
+
+/*Selects a column and the count, then groups the data by the values in the column*/
+SELECT price, COUNT(*) 
+FROM fake_apps
+GROUP BY price;
+
+/*Ex2 Count(*)*/
+SELECT price, COUNT(*) FROM fake_apps
+WHERE downloads > 20000
+GROUP BY price;
+
+/*SUM*/
+SELECT SUM(downloads) FROM fake_apps;
+
+/*Ex2 SUM w/ additional column*/
+SELECT category, SUM(downloads) FROM fake_apps
+GROUP BY category;
+
+/*MAX - returns the larges value in the column*/
+SELECT MAX(downloads) FROM fake_apps;
+
+/*Ex 2 MAX w/ multiple columns*/
+SELECT name, category, MAX(downloads) FROM fake_apps
+GROUP BY category;
+
+/*MIN - returns the smallest values*/
+SELECT MIN(downloads) FROM fake_apps;
+
+/*AVE - returns the average value for the column*/
+SELECT AVG(downloads) FROM fake_apps;
+
+/*ROUND - rounds the second decimal place*/
+SELECT price, ROUND(AVG(downloads), 2) 
+FROM fake_apps
+GROUP BY price;
+
+/**********************************Summary**************************************/
+Aggregate functions combine multiple rows together to form a single value of more meaningful information.
+COUNT takes the name of a column(s) as an argument and counts the number of rows where the value(s) is not NULL.
+GROUP BY is a clause used with aggregate functions to combine data from one or more columns.
+SUM() takes the column name as an argument and returns the sum of all the values in that column.
+MAX() takes the column name as an argument and returns the largest value in that column.
+MIN() takes the column name as an argument and returns the smallest value in that column.
+AVG() takes a column name as an argument and returns the average value for that column.
+ROUND() takes two arguments, a column name and the number of decimal places to round the values in that column.
+/*******************************************************************************/
+
+Primary Key - Identifies a record uniquely. 
+A table cannot have more than one primary key. 
+Can not be NULL.
+
+Foreign Key - A primary key from another table in your database schema.
+Can be NULL.
+
+Left is the first table that appears in the statement.
+Right is the second table that appears in the statement.
+
+/*Simple Table Join*/
+SELECT albums.name, albums.year, artists.name 
+FROM albums, artists;
+
+/*Inner Join - based on the primary key to foreign key - NO NULLS/NULLS excluded,
+in other words if the primary key does not find a foreign key the record is dropped*/
+SELECT*
+FROM albums
+JOIN artists ON albums.artist_id = artists.id;
+
+*****
+Left is the first table that appears in the statement.
+Right is the second table that appears in the statement.
+
+/*Outer/Left Join - Does not require a foreign key for the primary key 
+and will return NULLS*/
+SELECT*
+FROM albums /*Left Table*/
+LEFT JOIN artists /*Right Table*/ ON albums.artist_id = artists.id;
+
+/*AS - renames the column (alias) in your output to avoid cofusion between fields 
+with the same name is different fields when joined together*/
+
+SELECT
+  albums.name AS 'Album',
+  albums.year,
+  artists.name AS 'Artist'
+FROM
+  albums
+JOIN artists ON
+  albums.artist_id = artists.id
+WHERE
+  albums.year > 1980;
+
+/*******************************Summary******************************************/
+Primary Key is a column that serves a unique identifier for row in the table. Values in this column must be unique and cannot be NULL.
+Foreign Key is a column that contains the primary key to another table in the database. It is used to identify a particular row in the referenced table.
+Joins are used in SQL to combine data from multiple tables.
+INNER JOIN will combine rows from different tables if the join condition is true.
+LEFT OUTER JOIN will return every row in the left table, and if the join condition is not met, NULL values are used to fill in the columns from the right table.
+AS is a keyword in SQL that allows you to rename a column or table in the result set using an alias.
+
+
+
+
+
+
+
+
+
+
+
+
+
